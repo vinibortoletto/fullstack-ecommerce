@@ -1,0 +1,64 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:8.0.21
+    container_name: ecommerce_db
+    platform: linux/x86_64
+    ports:
+      - 3002:3306
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    networks:
+      - ecommerce_net
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 5
+    cap_add:
+      - SYS_NICE
+  
+  backend:
+    build: ./backend
+    container_name: ecommerce_backend
+    tty: true
+    stdin_open: true
+    command: bash
+    restart: always
+    user: node
+    volumes:
+      - ./backend:/home/node/app
+    depends_on:
+      - db
+    ports: 
+      - 3001:3001
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_HOST: db
+      MYSQL_DATABASE: ecommerce_db
+      MYSQL_PORT: 3001
+      JWT_SECRET: jwt_secret
+    networks:
+      - ecommerce_net
+    healthcheck:
+      test: ["CMD", "lsof", "-t", "-i:3001"]
+      timeout: 10s
+      retries: 5
+
+  frontend:
+    build: ./frontend
+    container_name: ecommerce_frontend
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "lsof", "-t", "-i:3000"]
+      timeout: 10s
+      retries: 5
+
+networks:
+  ecommerce_net:
+    driver: bridge
