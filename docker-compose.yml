@@ -26,7 +26,6 @@ services:
     stdin_open: true
     command: bash
     restart: always
-    user: node
     volumes:
       - ./backend:/home/node/app
     depends_on:
