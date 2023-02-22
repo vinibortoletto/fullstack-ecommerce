@@ -6,25 +6,20 @@ services:
     container_name: ecommerce_db
     platform: linux/x86_64
     ports:
-      - 3002:3306
+      - 3306:3306
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
     networks:
-      - backend_db_net
-    healthcheck:
-      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
-      timeout: 10s
-      retries: 5
-    cap_add:
-      - SYS_NICE
+      - net
 
   backend:
-    build: ./backend
+    image: node:16.14
     container_name: ecommerce_backend
     tty: true
     stdin_open: true
-    command: bash
+    working_dir: /app-backend
+    command: bash -c "npm install && npm start"
     restart: always
     volumes:
       - ./backend:/app-backend
@@ -37,22 +32,18 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_HOST: db
       MYSQL_DATABASE: ecommerce_db
-      MYSQL_PORT: 3001
+      MYSQL_PORT: 3306
       JWT_SECRET: jwt_secret
     networks:
-      - backend_db_net
-      - frontend_backend_net
-    healthcheck:
-      test: ['CMD', 'lsof', '-t', '-i:3001']
-      timeout: 10s
-      retries: 5
+      - net
 
   frontend:
-    build: ./frontend
+    image: node:16.14
     container_name: ecommerce_frontend
     tty: true
     stdin_open: true
-    command: bash
+    working_dir: /app-frontend
+    command: bash -c "npm install && npm start"
     restart: always
     volumes:
       - ./frontend:/app-frontend
@@ -61,14 +52,8 @@ services:
     depends_on:
       - backend
     networks:
-      - frontend_backend_net
-    healthcheck:
-      test: ['CMD', 'lsof', '-t', '-i:3000']
-      timeout: 10s
-      retries: 5
+      - net
 
 networks:
-  backend_db_net:
-    driver: bridge
-  frontend_backend_net:
+  net:
     driver: bridge
