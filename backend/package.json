@@ -1,20 +1,17 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "./build/server",
+  "description": "",
+  "main": "./build/server.js",
   "scripts": {
     "test": "mocha -r ts-node/register ./src/tests/*$NAME*.{test,spec}.ts -t 10000 --exit",
     "test:coverage": "nyc npm run test",
-    "db:reset": "npx -y tsc && npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
+    "db:reset": "npx -y tsc && npx sequelize-cli db:drop && npx sequelize-cli db:create",
     "db:migrate": "npx sequelize-cli db:migrate",
     "db:seed": "npx sequelize-cli db:seed",
     "start": "node .",
     "dev": "nodemon --watch \"./src/**\" ./src/server.ts"
   },
-  "description": "",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "1.0.2",
     "@types/bcryptjs": "2.4.2",
@@ -58,5 +55,8 @@
     "jsonwebtoken": "8.5.1",
     "mysql2": "2.3.3",
     "sequelize": "6.25.5"
-  }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
