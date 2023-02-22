@@ -1,5 +1,5 @@
 import App from './app';
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
-new App().start(PORT);
+new App().start(Number(PORT));

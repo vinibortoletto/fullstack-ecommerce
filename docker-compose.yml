@@ -33,6 +33,7 @@ services:
       MYSQL_HOST: db
       MYSQL_DATABASE: ecommerce_db
       MYSQL_PORT: 3306
+      PORT: 3001
       JWT_SECRET: jwt_secret
     networks:
       - net
