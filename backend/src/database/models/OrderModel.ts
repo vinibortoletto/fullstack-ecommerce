@@ -1,5 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import db from '.';
+import UserModel from './UserModel';
 
 export default class OrderModel extends Model {
   declare readonly id: number;
@@ -39,3 +40,13 @@ OrderModel.init(
     timestamps: true,
   }
 );
+
+OrderModel.belongsTo(UserModel, {
+  foreignKey: 'user_id',
+  as: 'id',
+});
+
+UserModel.hasMany(OrderModel, {
+  foreignKey: 'user_id',
+  as: 'id',
+});
