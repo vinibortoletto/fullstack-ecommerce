@@ -21,9 +21,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      create_time: {
-        type: Sequelize.DATE,
-      },
     });
   },
 
