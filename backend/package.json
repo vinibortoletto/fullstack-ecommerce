@@ -6,8 +6,7 @@
   "scripts": {
     "test": "mocha -r ts-node/register ./src/tests/*$NAME*.{test,spec}.ts -t 10000 --exit",
     "test:coverage": "nyc npm run test",
-    "db:reset": "npx -y tsc && npx sequelize-cli db:drop && npx sequelize-cli db:create",
-    "db:migrate": "npx sequelize-cli db:migrate",
+    "db:reset": "npx -y tsc && npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
     "db:seed": "npx sequelize-cli db:seed",
     "start": "node .",
     "dev": "nodemon --watch \"./src/**\" ./src/server.ts"
