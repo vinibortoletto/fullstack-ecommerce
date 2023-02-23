@@ -1,4 +1,4 @@
-import UserModel from '../../../../database/models/UserModel';
+import UserModel from '../../../../../database/models/UserModel';
 
 export const findAll: UserModel[] = [
   {
