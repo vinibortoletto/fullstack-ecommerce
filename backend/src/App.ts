@@ -1,6 +1,6 @@
 import 'express-async-errors';
 import express from 'express';
-import * as router from './api/routers';
+import * as routers from './api/routers';
 
 export default class App {
   public app: express.Express;
@@ -27,7 +27,7 @@ export default class App {
   }
 
   private initRoutes(): void {
-    this.app.use(router.user);
+    this.app.use(routers.user);
   }
 
   public start(PORT: number): void {
