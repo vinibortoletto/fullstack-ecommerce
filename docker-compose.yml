@@ -16,10 +16,11 @@ services:
   backend:
     image: node:16.14
     container_name: ecommerce_backend
+    platform: linux/x86_64
     tty: true
     stdin_open: true
     working_dir: /app-backend
-    command: bash -c "npm install && npm start"
+    command: bash -c "npm install && chown -R root /app-backend && npm start"
     restart: always
     volumes:
       - ./backend:/app-backend
