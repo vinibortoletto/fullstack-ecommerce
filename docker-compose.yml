@@ -20,7 +20,7 @@ services:
     tty: true
     stdin_open: true
     working_dir: /app-backend
-    command: bash -c "npm install && chown -R root /app-backend && npm start"
+    command: bash
     restart: always
     volumes:
       - ./backend:/app-backend
