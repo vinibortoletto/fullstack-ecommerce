@@ -1,3 +1,4 @@
-import { findAll } from "./findAll.mock";
+import { findAll } from './findAll.mock';
+import { findById } from './findById.mock';
 
-export { findAll }
+export { findAll, findById };
