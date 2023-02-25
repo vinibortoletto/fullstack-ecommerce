@@ -1,3 +1,3 @@
-import user from './userRouter';
+import users from './usersRouter';
 
-export { user };
+export { users };

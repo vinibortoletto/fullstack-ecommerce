@@ -27,7 +27,7 @@ export default class App {
   }
 
   private initRoutes(): void {
-    this.app.use(routers.user);
+    this.app.use(routers.users);
   }
 
   public start(PORT: number): void {
