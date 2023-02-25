@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { Model } from 'sequelize';
 import Sinon from 'sinon';
 import UserService from '../../../../../api/services/UserService';
-import * as mock from './findAll.mock';
+import * as mock from '../../../../mocks';
 
 describe('UserService.findAll', function () {
   afterEach(function () {
