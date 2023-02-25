@@ -2,13 +2,13 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import { Model } from 'sequelize';
 import Sinon from 'sinon';
-import App from '../../../App';
-import * as mocks from '../../mocks'
+import App from '../../App';
+import * as mocks from '../mocks';
 
 chai.use(chaiHttp);
 const { app } = new App();
 
-describe('GET /users', function () {
+describe('Integration test for /users route', function () {
   afterEach(function () {
     Sinon.restore();
   });
