@@ -1,20 +1,31 @@
 import { expect } from 'chai';
 import { Model } from 'sequelize';
-import Sinon from 'sinon';
+import sinon from 'sinon';
 import UserService from '../../../api/services/UserService';
 import * as mocks from '../../mocks';
 
 describe('Unit tests for UserService', function () {
+  const userService = new UserService();
+
   afterEach(function () {
-    Sinon.restore();
+    sinon.restore();
   });
 
   describe('findAll', function () {
     it('should find all users', async function () {
-      Sinon.stub(Model, 'findAll').resolves(mocks.findAll);
-      const userService = new UserService();
+      sinon.stub(Model, 'findAll').resolves(mocks.findAll);
       const result = await userService.findAll();
       expect(result).to.deep.equal(mocks.findAll);
     });
+  });
+
+  describe('findById', function () {
+    it('should find user by id', async function () {
+      sinon.stub(Model, 'findByPk').resolves(mocks.findById);
+      const result = await userService.findById(mocks.findById.id);
+      expect(result).to.deep.equal(mocks.findById);
+    });
+
+    it('should fail to find user by id', async function () {});
   });
 });
