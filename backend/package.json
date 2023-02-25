@@ -4,8 +4,7 @@
   "description": "",
   "main": "./build/server.js",
   "scripts": {
-    "test": "mocha -r ts-node/register ./src/tests/**/*.test.ts -t 10000 --exit",
-    "test:coverage": "nyc npm run test",
+    "test": "nyc mocha -r ts-node/register ./src/tests/**/*.test.ts -t 10000 --exit",
     "db:reset": "npx -y tsc && npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
     "db:seed": "npx sequelize-cli db:seed",
     "start": "node .",
