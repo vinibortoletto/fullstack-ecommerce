@@ -19,4 +19,4 @@ export const findAll: UserModel[] = [
     email: 'meu@email.com',
     password: '123456',
   },
-] as unknown as UserModel[];
+] as UserModel[];
