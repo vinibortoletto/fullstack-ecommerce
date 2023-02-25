@@ -1,6 +1,7 @@
 import 'express-async-errors';
 import express from 'express';
 import * as routers from './api/routers';
+import ErrorHandler from './api/middlewares/ErrorHandler';
 
 export default class App {
   public app: express.Express;
@@ -9,6 +10,7 @@ export default class App {
     this.app = express();
     this.initAuthHeader();
     this.initRoutes();
+    this.initMiddlewares();
   }
 
   private initAuthHeader(): void {
@@ -28,6 +30,10 @@ export default class App {
 
   private initRoutes(): void {
     this.app.use(routers.users);
+  }
+
+  private initMiddlewares() {
+    this.app.use(ErrorHandler.handle);
   }
 
   public start(PORT: number): void {
