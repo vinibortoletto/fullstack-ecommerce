@@ -6,7 +6,7 @@ export default class UserService implements IUserService {
   protected userModel: ModelStatic<UserModel> = UserModel;
 
   public async findAll(): Promise<UserModel[]> {
-    const users = await UserModel.findAll();
+    const users = await this.userModel.findAll();
     return users;
   }
 }
