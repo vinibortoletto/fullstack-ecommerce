@@ -29,4 +29,13 @@ describe('Integration test for /users route', function () {
     expect(response.body).to.deep.equal(mocks.findById);
     expect(response.status).to.equal(200);
   });
+
+  it('should fail to find user by id', async function () {
+    Sinon.stub(Model, 'findByPk').resolves(null);
+    const response = await chai.request(app).get('/users/999').send({
+      params: 999,
+    });
+
+    expect(response.status).to.equal(404);
+  });
 });
