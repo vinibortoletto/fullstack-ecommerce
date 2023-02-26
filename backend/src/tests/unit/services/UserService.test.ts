@@ -1,6 +1,8 @@
+import { triggerAsyncId } from 'async_hooks';
 import { expect } from 'chai';
 import { Model } from 'sequelize';
 import sinon from 'sinon';
+import NotFound from '../../../api/errors/NotFound';
 import UserService from '../../../api/services/UserService';
 import * as mocks from '../../mocks';
 
@@ -26,6 +28,16 @@ describe('Unit tests for UserService', function () {
       expect(result).to.deep.equal(mocks.findById);
     });
 
-    it('should fail to find user by id', async function () {});
+    it('should fail to find user by id', async function () {
+      sinon.stub(Model, 'findByPk').resolves(null);
+
+      try {
+        await userService.findById(999);
+      } catch (e) {
+        const error = e as Error;
+        expect(error).to.be.instanceOf(NotFound);
+        expect(error.message).to.equal('User not found');
+      }
+    });
   });
 });
