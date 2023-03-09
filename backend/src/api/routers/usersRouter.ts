@@ -8,5 +8,6 @@ const userController = new UserController(userService);
 
 router.get('/users', userController.findAll.bind(userController));
 router.get('/users/:id', userController.findById.bind(userController));
+router.post('/users', userController.create.bind(userController));
 
 export default router;
