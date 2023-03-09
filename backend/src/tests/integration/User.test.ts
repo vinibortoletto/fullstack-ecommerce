@@ -1,7 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import { Model } from 'sequelize';
-import Sinon from 'sinon';
+import { stub, restore } from 'sinon';
 import App from '../../App';
 import { usersMock } from '../mocks';
 
@@ -10,25 +10,30 @@ const { app } = new App();
 
 describe('Integration test for /users route', function () {
   afterEach(function () {
-    Sinon.restore();
+    restore();
   });
 
   it('should find all users', async function () {
-    Sinon.stub(Model, 'findAll').resolves(usersMock.userList);
+    stub(Model, 'findAll').resolves(usersMock.userList);
+
     const response = await chai.request(app).get('/users').send();
+
     expect(response.body).to.deep.equal(usersMock.userList);
     expect(response.status).to.equal(200);
   });
 
   it('should fail to find all users', async function () {
-    Sinon.stub(Model, 'findAll').throws(new Error('Internal Server Error'));
+    stub(Model, 'findAll').throws(new Error('Internal Server Error'));
+
     const response = await chai.request(app).get('/users').send();
+
     expect(response.body).to.deep.equal({ message: 'Internal Server Error' });
     expect(response.status).to.equal(500);
   });
 
   it('should find user by id', async function () {
-    Sinon.stub(Model, 'findByPk').resolves(usersMock.user);
+    stub(Model, 'findByPk').resolves(usersMock.user);
+
     const response = await chai.request(app).get('/users/1').send({
       params: usersMock.user.id,
     });
@@ -38,7 +43,8 @@ describe('Integration test for /users route', function () {
   });
 
   it('should fail to find user by id', async function () {
-    Sinon.stub(Model, 'findByPk').resolves(null);
+    stub(Model, 'findByPk').resolves(null);
+
     const response = await chai.request(app).get('/users/999').send({
       params: 999,
     });
