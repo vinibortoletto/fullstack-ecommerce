@@ -3,7 +3,7 @@ import { Model } from 'sequelize';
 import sinon from 'sinon';
 import NotFound from '../../../api/errors/NotFound';
 import UserService from '../../../api/services/UserService';
-import * as mocks from '../../mocks';
+import { usersMock } from '../../mocks';
 
 describe('Unit tests for UserService', function () {
   const userService = new UserService();
@@ -14,17 +14,17 @@ describe('Unit tests for UserService', function () {
 
   describe('findAll', function () {
     it('should find all users', async function () {
-      sinon.stub(Model, 'findAll').resolves(mocks.findAll);
+      sinon.stub(Model, 'findAll').resolves(usersMock.userList);
       const result = await userService.findAll();
-      expect(result).to.deep.equal(mocks.findAll);
+      expect(result).to.deep.equal(usersMock.userList);
     });
   });
 
   describe('findById', function () {
     it('should find user by id', async function () {
-      sinon.stub(Model, 'findByPk').resolves(mocks.findById);
-      const result = await userService.findById(mocks.findById.id);
-      expect(result).to.deep.equal(mocks.findById);
+      sinon.stub(Model, 'findByPk').resolves(usersMock.user);
+      const result = await userService.findById(usersMock.user.id);
+      expect(result).to.deep.equal(usersMock.user);
     });
 
     it('should fail to find user by id', async function () {
@@ -42,9 +42,9 @@ describe('Unit tests for UserService', function () {
 
   describe('create method', function () {
     it('should create a new user', async function () {
-      sinon.stub(Model, 'create').resolves(mocks.newUser);
-      const result = await userService.create(mocks.newUser);
-      expect(result).to.deep.equal(mocks.newUser);
+      sinon.stub(Model, 'create').resolves(usersMock.newUser);
+      const result = await userService.create(usersMock.newUser);
+      expect(result).to.deep.equal(usersMock.newUser);
     });
   });
 });

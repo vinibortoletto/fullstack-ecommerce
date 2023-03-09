@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import sinon from 'sinon';
 import UserController from '../../../api/controllers/UserController';
 import UserService from '../../../api/services/UserService';
-import * as mocks from '../../mocks';
+import { usersMock } from '../../mocks';
 
 describe('Unit tests for UserController', function () {
   const userService = new UserService();
@@ -20,11 +20,11 @@ describe('Unit tests for UserController', function () {
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns(res);
 
-      sinon.stub(userService, 'findAll').resolves(mocks.findAll);
+      sinon.stub(userService, 'findAll').resolves(usersMock.userList);
       await userController.findAll(req, res);
 
       expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
-      expect((res.json as sinon.SinonStub).calledWith(mocks.findAll)).to.be
+      expect((res.json as sinon.SinonStub).calledWith(usersMock.userList)).to.be
         .true;
     });
   });
@@ -37,12 +37,12 @@ describe('Unit tests for UserController', function () {
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns(res);
 
-      sinon.stub(userService, 'findById').resolves(mocks.usersMock.user);
+      sinon.stub(userService, 'findById').resolves(usersMock.user);
       await userController.findById(req, res);
 
       expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
-      expect((res.json as sinon.SinonStub).calledWith(mocks.usersMock.user)).to
-        .be.true;
+      expect((res.json as sinon.SinonStub).calledWith(usersMock.user)).to.be
+        .true;
     });
   });
 });
