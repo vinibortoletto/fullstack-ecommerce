@@ -27,7 +27,7 @@ describe('Unit tests for UserService', function () {
       expect(result).to.deep.equal(usersMock.user);
     });
 
-    it('should fail to find user by id', async function () {
+    it('should fail to find user by id if it does not exists in the database', async function () {
       sinon.stub(Model, 'findByPk').resolves(null);
 
       try {
