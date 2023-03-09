@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { INTERNAL_SERVER_ERROR } from '../utils/httpErrorCodes';
 
 export default class ErrorHandler {
   public static handle(
@@ -7,10 +8,7 @@ export default class ErrorHandler {
     res: Response,
     _next: NextFunction
   ): Response {
-    if (err instanceof Error && err.stack) {
-      return res.status(Number(err.stack)).json({ message: err.message });
-    }
-
-    return res.status(500).json({ message: 'Internal Server Error' });
+    const statusCode = Number(err.stack) || INTERNAL_SERVER_ERROR;
+    return res.status(statusCode).json({ message: err.message });
   }
 }
