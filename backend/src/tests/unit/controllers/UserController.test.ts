@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import { Request, Response } from 'express';
-import { Model } from 'sequelize';
 import sinon from 'sinon';
 import UserController from '../../../api/controllers/UserController';
 import UserService from '../../../api/services/UserService';
@@ -27,6 +26,23 @@ describe('Unit tests for UserController', function () {
       expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
       expect((res.json as sinon.SinonStub).calledWith(mocks.findAll)).to.be
         .true;
+    });
+  });
+
+  describe('findById method', function () {
+    it('should find user by id', async function () {
+      const res = {} as Response;
+      const req = { params: { id: 1 } } as unknown as Request;
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns(res);
+
+      sinon.stub(userService, 'findById').resolves(mocks.usersMock.user);
+      await userController.findById(req, res);
+
+      expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
+      expect((res.json as sinon.SinonStub).calledWith(mocks.usersMock.user)).to
+        .be.true;
     });
   });
 });
