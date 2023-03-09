@@ -20,6 +20,13 @@ describe('Integration test for /users route', function () {
     expect(response.status).to.equal(200);
   });
 
+  it('should fail to find all users', async function () {
+    Sinon.stub(Model, 'findAll').throws(new Error('Internal Server Error'));
+    const response = await chai.request(app).get('/users').send();
+    expect(response.body).to.deep.equal({ message: 'Internal Server Error' });
+    expect(response.status).to.equal(500);
+  });
+
   it('should find user by id', async function () {
     Sinon.stub(Model, 'findByPk').resolves(usersMock.user);
     const response = await chai.request(app).get('/users/1').send({
