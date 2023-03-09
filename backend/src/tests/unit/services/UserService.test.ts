@@ -1,4 +1,3 @@
-import { triggerAsyncId } from 'async_hooks';
 import { expect } from 'chai';
 import { Model } from 'sequelize';
 import sinon from 'sinon';
@@ -32,12 +31,20 @@ describe('Unit tests for UserService', function () {
       sinon.stub(Model, 'findByPk').resolves(null);
 
       try {
-        await userService.findById(999);
+        const result = await userService.findById(999);
       } catch (e) {
         const error = e as Error;
         expect(error).to.be.instanceOf(NotFound);
         expect(error.message).to.equal('User not found');
       }
+    });
+  });
+
+  describe('create method', function () {
+    it('should create a new user', async function () {
+      sinon.stub(Model, 'create').resolves(mocks.newUser);
+      const result = await userService.create(mocks.newUser);
+      expect(result).to.deep.equal(mocks.newUser);
     });
   });
 });
