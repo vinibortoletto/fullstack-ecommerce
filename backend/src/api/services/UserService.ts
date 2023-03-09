@@ -1,6 +1,7 @@
 import { ModelStatic } from 'sequelize';
 import UserModel from '../../database/models/UserModel';
 import NotFound from '../errors/NotFound';
+import IUser from '../interfaces/IUser';
 import IUserService from '../interfaces/IUserService';
 
 export default class UserService implements IUserService {
@@ -15,5 +16,10 @@ export default class UserService implements IUserService {
     const user = await this._userModel.findByPk(id);
     if (!user) throw new NotFound('User not found');
     return user;
+  }
+
+  public async create(user: IUser): Promise<UserModel> {
+    const newUser = await this._userModel.create({ ...user });
+    return newUser;
   }
 }
