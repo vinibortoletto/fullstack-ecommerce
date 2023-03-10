@@ -13,7 +13,7 @@ import {
   INTERNAL_SERVER_ERROR,
   NOT_FOUND,
   OK,
-} from '../../api/utils/httpErrorCodes';
+} from '../../api/utils/httpStatusCodes';
 import App from '../../App';
 import { usersMock } from '../mocks';
 

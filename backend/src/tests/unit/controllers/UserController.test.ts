@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import sinon from 'sinon';
 import UserController from '../../../api/controllers/UserController';
 import UserService from '../../../api/services/UserService';
-import { CREATED, OK } from '../../../api/utils/httpErrorCodes';
+import { CREATED, OK } from '../../../api/utils/httpStatusCodes';
 import { usersMock } from '../../mocks';
 
 describe('Unit tests for UserController', function () {

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { INTERNAL_SERVER_ERROR } from '../utils/httpErrorCodes';
+import { INTERNAL_SERVER_ERROR } from '../utils/httpStatusCodes';
 
 export default class ErrorHandler {
   public static handle(

@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import Conflict from '../../../api/errors/Conflict';
 import NotFound from '../../../api/errors/NotFound';
 import UserService from '../../../api/services/UserService';
-import { CONFLICT } from '../../../api/utils/httpErrorCodes';
+import { CONFLICT } from '../../../api/utils/httpStatusCodes';
 import { usersMock } from '../../mocks';
 
 describe('Unit tests for UserService', function () {

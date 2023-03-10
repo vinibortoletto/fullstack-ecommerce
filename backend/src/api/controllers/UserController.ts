@@ -1,6 +1,6 @@
 import IUserService from '../interfaces/IUserService';
 import { NextFunction, Request, Response } from 'express';
-import { CREATED, OK } from '../utils/httpErrorCodes';
+import { CREATED, OK } from '../utils/httpStatusCodes';
 
 export default class UserController {
   constructor(private _userService: IUserService) {}
