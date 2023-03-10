@@ -1,10 +1,11 @@
+import { IUser } from '../../api/interfaces';
 import UserModel from '../../database/models/UserModel';
 
 export const user: UserModel = {
   id: 1,
   fullName: 'Dalva Moso Bortoletto',
   email: 'meu@email.com',
-  password: '123456',
+  password: '12345678',
 } as UserModel;
 
 export const userList: UserModel[] = [
@@ -32,5 +33,26 @@ export const newUser: UserModel = {
   id: 19,
   fullName: 'Jacaré Pereira',
   email: 'meu@email.com',
-  password: '123456',
+  password: '12345678',
 } as UserModel;
+
+export const newUserBody: IUser = {
+  fullName: 'Jacaré Pereira',
+  email: 'meu@email.com',
+  password: '12345678',
+};
+
+export const newUserBodyWithoutFullName = {
+  email: 'meu@email.com',
+  password: '12345678',
+};
+
+export const newUserBodyWithoutEmail = {
+  fullName: 'Jacaré Pereira',
+  password: '12345678',
+};
+
+export const newUserBodyWithoutPassword = {
+  fullName: 'Jacaré Pereira',
+  email: 'meu@email.com',
+};
