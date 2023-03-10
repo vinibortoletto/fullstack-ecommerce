@@ -2,6 +2,11 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import { Model } from 'sequelize';
 import { stub, restore } from 'sinon';
+import {
+  emailErrorMessages,
+  fullNameErrorMessages,
+  passwordErrorMessages,
+} from '../../api/utils/errorMessages';
 import App from '../../App';
 import { usersMock } from '../mocks';
 
@@ -50,5 +55,60 @@ describe('Integration test for /users route', function () {
     });
 
     expect(response.status).to.equal(404);
+  });
+
+  describe('POST /users route', function () {
+    it('should create user', async function () {
+      stub(Model, 'create').resolves(usersMock.newUser);
+
+      const response = await chai
+        .request(app)
+        .post('/users')
+        .send({ ...usersMock.newUserBody });
+
+      expect(response.status).to.equal(201);
+    });
+
+    it('should fail to create user if fullName is missing from request', async function () {
+      stub(Model, 'create').resolves(undefined);
+
+      const response = await chai
+        .request(app)
+        .post('/users')
+        .send({ ...usersMock.newUserBodyWithoutFullName });
+
+      expect(response.status).to.equal(400);
+      expect(response.body).to.deep.equal({
+        message: fullNameErrorMessages.required,
+      });
+    });
+
+    it('should fail to create user if email is missing from request', async function () {
+      stub(Model, 'create').resolves(undefined);
+
+      const response = await chai
+        .request(app)
+        .post('/users')
+        .send({ ...usersMock.newUserBodyWithoutEmail });
+
+      expect(response.status).to.equal(400);
+      expect(response.body).to.deep.equal({
+        message: emailErrorMessages.required,
+      });
+    });
+
+    it('should fail to create user if password is missing from request', async function () {
+      stub(Model, 'create').resolves(undefined);
+
+      const response = await chai
+        .request(app)
+        .post('/users')
+        .send({ ...usersMock.newUserBodyWithoutPassword });
+
+      expect(response.status).to.equal(400);
+      expect(response.body).to.deep.equal({
+        message: passwordErrorMessages.required,
+      });
+    });
   });
 });
