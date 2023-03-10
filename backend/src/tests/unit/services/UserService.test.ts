@@ -1,8 +1,10 @@
 import { expect } from 'chai';
 import { Model } from 'sequelize';
 import sinon from 'sinon';
+import Conflict from '../../../api/errors/Conflict';
 import NotFound from '../../../api/errors/NotFound';
 import UserService from '../../../api/services/UserService';
+import { CONFLICT } from '../../../api/utils/httpErrorCodes';
 import { usersMock } from '../../mocks';
 
 describe('Unit tests for UserService', function () {
@@ -45,6 +47,19 @@ describe('Unit tests for UserService', function () {
       sinon.stub(Model, 'create').resolves(usersMock.newUser);
       const result = await userService.create(usersMock.newUser);
       expect(result).to.deep.equal(usersMock.newUser);
+    });
+
+    it('should fail to create a new user with an email that already exists', async function () {
+      sinon.stub(Model, 'findOne').resolves(usersMock.user);
+
+      try {
+        await userService.create(usersMock.newUser);
+      } catch (e) {
+        const error = e as Error;
+        expect(error).to.be.instanceOf(Conflict);
+        expect(error.stack).to.equal(String(CONFLICT));
+        expect(error.message).to.equal('Já existe um usuário com esse email');
+      }
     });
   });
 });
