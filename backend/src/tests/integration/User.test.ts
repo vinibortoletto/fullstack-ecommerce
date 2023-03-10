@@ -66,6 +66,7 @@ describe('Integration test for /users route', function () {
 
   describe('POST /users route', function () {
     it('should create user', async function () {
+      stub(Model, 'findOne').resolves(null);
       stub(Model, 'create').resolves(usersMock.newUser);
 
       const response = await chai
