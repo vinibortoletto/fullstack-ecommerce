@@ -1,5 +1,6 @@
 import { ModelStatic } from 'sequelize';
 import UserModel from '../../database/models/UserModel';
+import Conflict from '../errors/Conflict';
 import NotFound from '../errors/NotFound';
 import IUserService from '../interfaces/IUserService';
 
@@ -18,6 +19,12 @@ export default class UserService implements IUserService {
   }
 
   public async create(user: UserModel): Promise<UserModel> {
+    const hasUser = await this._userModel.findOne({
+      where: { email: user.email },
+    });
+
+    if (hasUser) throw new Conflict('Já existe um usuário com esse email');
+
     const newUser = await this._userModel.create({ ...user });
     return newUser;
   }
