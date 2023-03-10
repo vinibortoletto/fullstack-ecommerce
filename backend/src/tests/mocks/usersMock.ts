@@ -1,4 +1,3 @@
-import { IUser } from '../../api/interfaces';
 import UserModel from '../../database/models/UserModel';
 
 export const user: UserModel = {
@@ -36,7 +35,7 @@ export const newUser: UserModel = {
   password: '12345678',
 } as UserModel;
 
-export const newUserBody: IUser = {
+export const newUserBody = {
   fullName: 'Jacaré Pereira',
   email: 'meu@email.com',
   password: '12345678',

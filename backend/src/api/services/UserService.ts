@@ -1,7 +1,6 @@
 import { ModelStatic } from 'sequelize';
 import UserModel from '../../database/models/UserModel';
 import NotFound from '../errors/NotFound';
-import IUser from '../interfaces/IUser';
 import IUserService from '../interfaces/IUserService';
 
 export default class UserService implements IUserService {
@@ -18,7 +17,7 @@ export default class UserService implements IUserService {
     return user;
   }
 
-  public async create(user: IUser): Promise<UserModel> {
+  public async create(user: UserModel): Promise<UserModel> {
     const newUser = await this._userModel.create({ ...user });
     return newUser;
   }
