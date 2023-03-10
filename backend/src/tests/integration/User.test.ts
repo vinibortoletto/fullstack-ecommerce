@@ -7,6 +7,13 @@ import {
   fullNameErrorMessages,
   passwordErrorMessages,
 } from '../../api/utils/errorMessages';
+import {
+  BAD_REQUEST,
+  CREATED,
+  INTERNAL_SERVER_ERROR,
+  NOT_FOUND,
+  OK,
+} from '../../api/utils/httpErrorCodes';
 import App from '../../App';
 import { usersMock } from '../mocks';
 
@@ -24,7 +31,7 @@ describe('Integration test for /users route', function () {
     const response = await chai.request(app).get('/users').send();
 
     expect(response.body).to.deep.equal(usersMock.userList);
-    expect(response.status).to.equal(200);
+    expect(response.status).to.equal(OK);
   });
 
   it('should fail to find all users', async function () {
@@ -33,7 +40,7 @@ describe('Integration test for /users route', function () {
     const response = await chai.request(app).get('/users').send();
 
     expect(response.body).to.deep.equal({ message: 'Internal Server Error' });
-    expect(response.status).to.equal(500);
+    expect(response.status).to.equal(INTERNAL_SERVER_ERROR);
   });
 
   it('should find user by id', async function () {
@@ -44,7 +51,7 @@ describe('Integration test for /users route', function () {
     });
 
     expect(response.body).to.deep.equal(usersMock.user);
-    expect(response.status).to.equal(200);
+    expect(response.status).to.equal(OK);
   });
 
   it('should fail to find user by id', async function () {
@@ -54,7 +61,7 @@ describe('Integration test for /users route', function () {
       params: 999,
     });
 
-    expect(response.status).to.equal(404);
+    expect(response.status).to.equal(NOT_FOUND);
   });
 
   describe('POST /users route', function () {
@@ -66,7 +73,7 @@ describe('Integration test for /users route', function () {
         .post('/users')
         .send({ ...usersMock.newUserBody });
 
-      expect(response.status).to.equal(201);
+      expect(response.status).to.equal(CREATED);
     });
 
     it('should fail to create user if fullName is missing from request', async function () {
@@ -77,7 +84,7 @@ describe('Integration test for /users route', function () {
         .post('/users')
         .send({ ...usersMock.newUserBodyWithoutFullName });
 
-      expect(response.status).to.equal(400);
+      expect(response.status).to.equal(BAD_REQUEST);
       expect(response.body).to.deep.equal({
         message: fullNameErrorMessages.required,
       });
@@ -91,7 +98,7 @@ describe('Integration test for /users route', function () {
         .post('/users')
         .send({ ...usersMock.newUserBodyWithoutEmail });
 
-      expect(response.status).to.equal(400);
+      expect(response.status).to.equal(BAD_REQUEST);
       expect(response.body).to.deep.equal({
         message: emailErrorMessages.required,
       });
@@ -105,7 +112,7 @@ describe('Integration test for /users route', function () {
         .post('/users')
         .send({ ...usersMock.newUserBodyWithoutPassword });
 
-      expect(response.status).to.equal(400);
+      expect(response.status).to.equal(BAD_REQUEST);
       expect(response.body).to.deep.equal({
         message: passwordErrorMessages.required,
       });

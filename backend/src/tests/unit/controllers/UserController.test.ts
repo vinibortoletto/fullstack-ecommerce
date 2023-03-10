@@ -1,8 +1,9 @@
 import { expect } from 'chai';
-import { NextFunction, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import sinon from 'sinon';
 import UserController from '../../../api/controllers/UserController';
 import UserService from '../../../api/services/UserService';
+import { CREATED, OK } from '../../../api/utils/httpErrorCodes';
 import { usersMock } from '../../mocks';
 
 describe('Unit tests for UserController', function () {
@@ -25,7 +26,7 @@ describe('Unit tests for UserController', function () {
       sinon.stub(userService, 'findAll').resolves(usersMock.userList);
       await userController.findAll(req, res, next);
 
-      expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
+      expect((res.status as sinon.SinonStub).calledWith(OK)).to.be.true;
       expect((res.json as sinon.SinonStub).calledWith(usersMock.userList)).to.be
         .true;
     });
@@ -43,7 +44,7 @@ describe('Unit tests for UserController', function () {
       sinon.stub(userService, 'findById').resolves(usersMock.user);
       await userController.findById(req, res, next);
 
-      expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
+      expect((res.status as sinon.SinonStub).calledWith(OK)).to.be.true;
       expect((res.json as sinon.SinonStub).calledWith(usersMock.user)).to.be
         .true;
     });
@@ -63,7 +64,7 @@ describe('Unit tests for UserController', function () {
       sinon.stub(userService, 'create').resolves(usersMock.newUser);
       await userController.create(req, res, next);
 
-      expect((res.status as sinon.SinonStub).calledWith(201)).to.be.true;
+      expect((res.status as sinon.SinonStub).calledWith(CREATED)).to.be.true;
       expect((res.json as sinon.SinonStub).calledWith(usersMock.newUser)).to.be
         .true;
     });

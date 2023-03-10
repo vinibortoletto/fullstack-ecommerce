@@ -1,6 +1,6 @@
 import IUserService from '../interfaces/IUserService';
 import { NextFunction, Request, Response } from 'express';
-import { OK } from '../utils/httpErrorCodes';
+import { CREATED, OK } from '../utils/httpErrorCodes';
 
 export default class UserController {
   constructor(private _userService: IUserService) {}
@@ -40,7 +40,7 @@ export default class UserController {
     const newUser = req.body;
     try {
       const user = await this._userService.create(newUser);
-      return res.status(OK).json(user);
+      return res.status(CREATED).json(user);
     } catch (error) {
       next(error);
     }
