@@ -9,6 +9,7 @@ import {
 } from '../../api/utils/errorMessages';
 import {
   BAD_REQUEST,
+  CONFLICT,
   CREATED,
   INTERNAL_SERVER_ERROR,
   NOT_FOUND,
@@ -117,6 +118,18 @@ describe('Integration test for /users route', function () {
       expect(response.body).to.deep.equal({
         message: passwordErrorMessages.required,
       });
+    });
+
+    it('should fail to create a new user with an email that already exists', async function () {
+      stub(Model, 'findOne').resolves(usersMock.user);
+      stub(Model, 'create').resolves(usersMock.newUser);
+
+      const response = await chai
+        .request(app)
+        .post('/users')
+        .send({ ...usersMock.newUserBody });
+
+      expect(response.status).to.equal(CONFLICT);
     });
   });
 });
