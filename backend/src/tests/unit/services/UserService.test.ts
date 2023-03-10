@@ -44,6 +44,7 @@ describe('Unit tests for UserService', function () {
 
   describe('create method', function () {
     it('should create a new user', async function () {
+      sinon.stub(Model, 'findOne').resolves(null);
       sinon.stub(Model, 'create').resolves(usersMock.newUser);
       const result = await userService.create(usersMock.newUser);
       expect(result).to.deep.equal(usersMock.newUser);
