@@ -3,6 +3,7 @@ import UserModel from '../../database/models/UserModel';
 import Conflict from '../errors/Conflict';
 import NotFound from '../errors/NotFound';
 import IUserService from '../interfaces/IUserService';
+import BcryptHandler from '../utils/BcryptHandler';
 
 export default class UserService implements IUserService {
   private _userModel: ModelStatic<UserModel> = UserModel;
@@ -19,13 +20,18 @@ export default class UserService implements IUserService {
   }
 
   public async create(user: UserModel): Promise<UserModel> {
-    const hasUser = await this._userModel.findOne({
+    const hasUser: UserModel | null = await this._userModel.findOne({
       where: { email: user.email },
     });
 
     if (hasUser) throw new Conflict('Já existe um usuário com esse email');
 
-    const newUser = await this._userModel.create({ ...user });
+    const password = BcryptHandler.hashPassword(user.password);
+    const newUser: UserModel = await this._userModel.create({
+      ...user,
+      password,
+    });
+
     return newUser;
   }
 }
