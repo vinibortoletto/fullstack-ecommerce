@@ -2,8 +2,12 @@ import { ModelStatic } from 'sequelize';
 import UserModel from '../../database/models/UserModel';
 import Conflict from '../errors/Conflict';
 import NotFound from '../errors/NotFound';
+import Unauthorized from '../errors/Unauthorized';
+import { ILogin } from '../interfaces';
 import IUserService from '../interfaces/IUserService';
 import BcryptHandler from '../utils/BcryptHandler';
+import { userNotFound } from '../utils/errorMessages';
+import TokenHandler from '../utils/TokenHandler';
 
 export default class UserService implements IUserService {
   private _userModel: ModelStatic<UserModel> = UserModel;
@@ -33,5 +37,18 @@ export default class UserService implements IUserService {
     });
 
     return newUser;
+  }
+
+  public async login(login: ILogin): Promise<string> {
+    const user = await this._userModel.findOne({
+      where: { email: login.email },
+    });
+
+    if (!user) {
+      throw new Unauthorized(userNotFound);
+    }
+
+    const token: string = TokenHandler.generate(login);
+    return token;
   }
 }
