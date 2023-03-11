@@ -1,3 +1,4 @@
 import IUserService from './IUserService';
+import ILogin from './ILogin';
 
-export { IUserService };
+export { IUserService, ILogin };
