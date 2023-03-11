@@ -3,8 +3,10 @@ import { Model } from 'sequelize';
 import sinon from 'sinon';
 import Conflict from '../../../api/errors/Conflict';
 import NotFound from '../../../api/errors/NotFound';
+import Unauthorized from '../../../api/errors/Unauthorized';
 import UserService from '../../../api/services/UserService';
-import { CONFLICT } from '../../../api/utils/httpStatusCodes';
+import { userNotFound } from '../../../api/utils/errorMessages';
+import { CONFLICT, UNAUTHORIZED } from '../../../api/utils/httpStatusCodes';
 import { usersMock } from '../../mocks';
 
 describe('Unit tests for UserService', function () {
@@ -60,6 +62,21 @@ describe('Unit tests for UserService', function () {
         expect(error).to.be.instanceOf(Conflict);
         expect(error.stack).to.equal(String(CONFLICT));
         expect(error.message).to.equal('Já existe um usuário com esse email');
+      }
+    });
+  });
+
+  describe('login method', function () {
+    it('should fail to login if cannot find email in the database', async function () {
+      sinon.stub(Model, 'findOne').resolves(null);
+
+      try {
+        await userService.login(usersMock.login);
+      } catch (e) {
+        const error = e as Error;
+        expect(error).to.be.instanceOf(Unauthorized);
+        expect(error.stack).to.equal(String(UNAUTHORIZED));
+        expect(error.message).to.equal(userNotFound);
       }
     });
   });
