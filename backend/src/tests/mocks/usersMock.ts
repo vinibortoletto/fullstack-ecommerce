@@ -55,3 +55,8 @@ export const newUserBodyWithoutPassword = {
   fullName: 'Jacaré Pereira',
   email: 'meu@email.com',
 };
+
+export const login = {
+  email: 'email@email.com',
+  password: '12345678',
+};
