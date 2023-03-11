@@ -16,3 +16,6 @@ export const passwordErrorMessages = {
   empty: 'Senha não pode ser vazio',
   required: 'Senha é um campo obrigatório',
 };
+
+export const userNotFound = 'Não foi encontrado um usuário com esse email';
+export const invalidToken = 'Token inválido';
