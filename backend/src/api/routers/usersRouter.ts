@@ -8,11 +8,15 @@ const userService = new UserService();
 const userController = new UserController(userService);
 
 router.get('/users', userController.findAll.bind(userController));
+
 router.get('/users/:id', userController.findById.bind(userController));
+
 router.post(
   '/users',
   ValidateNewUser.validate,
   userController.create.bind(userController)
 );
+
+router.post('/login', userController.login.bind(userController));
 
 export default router;
