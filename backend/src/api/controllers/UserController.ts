@@ -1,6 +1,7 @@
 import IUserService from '../interfaces/IUserService';
 import { NextFunction, Request, Response } from 'express';
 import { CREATED, OK } from '../utils/httpStatusCodes';
+import { ILogin } from '../interfaces';
 
 export default class UserController {
   constructor(private _userService: IUserService) {}
@@ -41,6 +42,21 @@ export default class UserController {
     try {
       const user = await this._userService.create(newUser);
       return res.status(CREATED).json(user);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public async login(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> {
+    const login: ILogin = req.body;
+
+    try {
+      const token = await this._userService.login(login);
+      return res.status(OK).json(token);
     } catch (error) {
       next(error);
     }
