@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import sinon from 'sinon';
 import UserController from '../../../api/controllers/UserController';
 import UserService from '../../../api/services/UserService';
-import { CREATED, OK } from '../../../api/utils/httpStatusCodes';
+import { CREATED, OK, UNAUTHORIZED } from '../../../api/utils/httpStatusCodes';
 import { usersMock } from '../../mocks';
 
 describe('Unit tests for UserController', function () {
@@ -66,6 +66,26 @@ describe('Unit tests for UserController', function () {
 
       expect((res.status as sinon.SinonStub).calledWith(CREATED)).to.be.true;
       expect((res.json as sinon.SinonStub).calledWith(usersMock.newUser)).to.be
+        .true;
+    });
+  });
+
+  describe('login method', function () {
+    it('should be able to login', async function () {
+      const res = {} as Response;
+      const req = {
+        body: { ...usersMock.login },
+      } as unknown as Request;
+      const next = sinon.stub();
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns(res);
+
+      sinon.stub(userService, 'login').resolves({ token: 'token' });
+      await userController.login(req, res, next);
+
+      expect((res.status as sinon.SinonStub).calledWith(OK)).to.be.true;
+      expect((res.json as sinon.SinonStub).calledWith({ token: 'token' })).to.be
         .true;
     });
   });
