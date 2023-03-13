@@ -1,22 +1,22 @@
 import { Router } from 'express';
-import UserController from '../controllers/UserController';
-import ValidateNewUser from '../middlewares/ValidateNewUser';
-import UserService from '../services/UserService';
+import { UserController } from '../controllers';
+import { ValidateNewUser } from '../middlewares';
+import { UserService } from '../services';
 
 const router = Router();
-const userService = new UserService();
-const userController = new UserController(userService);
+const service = new UserService();
+const controller = new UserController(service);
 
-router.get('/users', userController.findAll.bind(userController));
+router.get('/users', controller.findAll.bind(controller));
 
-router.get('/users/:id', userController.findById.bind(userController));
+router.get('/users/:id', controller.findById.bind(controller));
 
 router.post(
   '/users',
   ValidateNewUser.validate,
-  userController.create.bind(userController)
+  controller.create.bind(controller)
 );
 
-router.post('/login', userController.login.bind(userController));
+router.post('/login', controller.login.bind(controller));
 
 export default router;
