@@ -4,6 +4,7 @@ import Conflict from '../errors/Conflict';
 import NotFound from '../errors/NotFound';
 import Unauthorized from '../errors/Unauthorized';
 import { ILogin } from '../interfaces';
+import IToken from '../interfaces/IToken';
 import IUserService from '../interfaces/IUserService';
 import BcryptHandler from '../utils/BcryptHandler';
 import { userNotFound } from '../utils/errorMessages';
@@ -39,7 +40,7 @@ export default class UserService implements IUserService {
     return newUser;
   }
 
-  public async login(login: ILogin): Promise<string> {
+  public async login(login: ILogin): Promise<IToken> {
     const user = await this._userModel.findOne({
       where: { email: login.email },
     });
@@ -49,6 +50,6 @@ export default class UserService implements IUserService {
     }
 
     const token: string = TokenHandler.generate(login);
-    return token;
+    return { token };
   }
 }
