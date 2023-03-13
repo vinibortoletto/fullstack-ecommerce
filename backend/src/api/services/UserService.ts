@@ -1,8 +1,8 @@
 import { ModelStatic } from 'sequelize';
 import UserModel from '../../database/models/UserModel';
-import Conflict from '../errors/Conflict';
-import NotFound from '../errors/NotFound';
-import Unauthorized from '../errors/Unauthorized';
+import { Conflict } from '../errors';
+import { NotFound } from '../errors';
+import { Unauthorized } from '../errors';
 import { ILogin, IToken } from '../interfaces';
 import IUserService from '../interfaces/IUserService';
 import BcryptHandler from '../utils/BcryptHandler';

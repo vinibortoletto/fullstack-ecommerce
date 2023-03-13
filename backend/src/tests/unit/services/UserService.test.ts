@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import { Model } from 'sequelize';
 import sinon from 'sinon';
-import Conflict from '../../../api/errors/Conflict';
-import NotFound from '../../../api/errors/NotFound';
-import Unauthorized from '../../../api/errors/Unauthorized';
+import { Conflict } from '../../../api/errors';
+import { NotFound } from '../../../api/errors';
+import { Unauthorized } from '../../../api/errors';
 import UserService from '../../../api/services/UserService';
 import { userNotFound } from '../../../api/utils/errorMessages';
 import { CONFLICT, UNAUTHORIZED } from '../../../api/utils/httpStatusCodes';

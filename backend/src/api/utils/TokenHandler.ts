@@ -1,5 +1,5 @@
 import { JwtPayload, Secret, sign, verify } from 'jsonwebtoken';
-import Unauthorized from '../errors/Unauthorized';
+import { Unauthorized } from '../errors';
 import { ILogin } from '../interfaces';
 import { invalidToken } from './errorMessages';
 
