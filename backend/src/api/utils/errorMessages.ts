@@ -19,3 +19,4 @@ export const passwordErrorMessages = {
 
 export const userNotFound = 'Não foi encontrado um usuário com esse email';
 export const invalidToken = 'Token inválido';
+export const emailAlreadyInUse = 'Já existe um usuário com esse email';

@@ -5,7 +5,10 @@ import { Conflict } from '../../../api/errors';
 import { NotFound } from '../../../api/errors';
 import { Unauthorized } from '../../../api/errors';
 import UserService from '../../../api/services/UserService';
-import { userNotFound } from '../../../api/utils/errorMessages';
+import {
+  emailAlreadyInUse,
+  userNotFound,
+} from '../../../api/utils/errorMessages';
 import { CONFLICT, UNAUTHORIZED } from '../../../api/utils/httpStatusCodes';
 import { usersMock } from '../../mocks';
 
@@ -61,7 +64,7 @@ describe('Unit tests for UserService', function () {
         const error = e as Error;
         expect(error).to.be.instanceOf(Conflict);
         expect(error.stack).to.equal(String(CONFLICT));
-        expect(error.message).to.equal('Já existe um usuário com esse email');
+        expect(error.message).to.equal(emailAlreadyInUse);
       }
     });
   });
