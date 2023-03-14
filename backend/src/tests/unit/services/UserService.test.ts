@@ -39,7 +39,7 @@ describe('Unit tests for UserService', function () {
       sinon.stub(Model, 'findByPk').resolves(null);
 
       try {
-        const result = await userService.findById(999);
+        await userService.findById(999);
       } catch (e) {
         const error = e as Error;
         expect(error).to.be.instanceOf(NotFound);
