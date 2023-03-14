@@ -14,6 +14,7 @@ import {
   INTERNAL_SERVER_ERROR,
   NOT_FOUND,
   OK,
+  UNAUTHORIZED,
 } from '../../api/utils/httpStatusCodes';
 import App from '../../App';
 import { usersMock } from '../mocks';
@@ -21,51 +22,55 @@ import { usersMock } from '../mocks';
 chai.use(chaiHttp);
 const { app } = new App();
 
-describe('Integration test for /users route', function () {
+describe('Integration test for users', function () {
   afterEach(function () {
     restore();
   });
 
-  it('should find all users', async function () {
-    stub(Model, 'findAll').resolves(usersMock.userList);
+  describe('GET /users', function () {
+    it('should find all users', async function () {
+      stub(Model, 'findAll').resolves(usersMock.userList);
 
-    const response = await chai.request(app).get('/users').send();
+      const response = await chai.request(app).get('/users').send();
 
-    expect(response.body).to.deep.equal(usersMock.userList);
-    expect(response.status).to.equal(OK);
-  });
-
-  it('should fail to find all users', async function () {
-    stub(Model, 'findAll').throws(new Error('Internal Server Error'));
-
-    const response = await chai.request(app).get('/users').send();
-
-    expect(response.body).to.deep.equal({ message: 'Internal Server Error' });
-    expect(response.status).to.equal(INTERNAL_SERVER_ERROR);
-  });
-
-  it('should find user by id', async function () {
-    stub(Model, 'findByPk').resolves(usersMock.user);
-
-    const response = await chai.request(app).get('/users/1').send({
-      params: usersMock.user.id,
+      expect(response.body).to.deep.equal(usersMock.userList);
+      expect(response.status).to.equal(OK);
     });
 
-    expect(response.body).to.deep.equal(usersMock.user);
-    expect(response.status).to.equal(OK);
+    it('should fail to find all users', async function () {
+      stub(Model, 'findAll').throws(new Error('Internal Server Error'));
+
+      const response = await chai.request(app).get('/users').send();
+
+      expect(response.body).to.deep.equal({ message: 'Internal Server Error' });
+      expect(response.status).to.equal(INTERNAL_SERVER_ERROR);
+    });
   });
 
-  it('should fail to find user by id', async function () {
-    stub(Model, 'findByPk').resolves(null);
+  describe('GET /users/:id', function () {
+    it('should find user by id', async function () {
+      stub(Model, 'findByPk').resolves(usersMock.user);
 
-    const response = await chai.request(app).get('/users/999').send({
-      params: 999,
+      const response = await chai.request(app).get('/users/1').send({
+        params: usersMock.user.id,
+      });
+
+      expect(response.body).to.deep.equal(usersMock.user);
+      expect(response.status).to.equal(OK);
     });
 
-    expect(response.status).to.equal(NOT_FOUND);
+    it('should fail to find user by id', async function () {
+      stub(Model, 'findByPk').resolves(null);
+
+      const response = await chai.request(app).get('/users/999').send({
+        params: 999,
+      });
+
+      expect(response.status).to.equal(NOT_FOUND);
+    });
   });
 
-  describe('POST /users route', function () {
+  describe('POST /users', function () {
     it('should create user', async function () {
       stub(Model, 'findOne').resolves(null);
       stub(Model, 'create').resolves(usersMock.newUser);
@@ -130,6 +135,30 @@ describe('Integration test for /users route', function () {
         .send({ ...usersMock.newUserBody });
 
       expect(response.status).to.equal(CONFLICT);
+    });
+  });
+
+  describe('POST /login', function () {
+    it('should be able to login', async function () {
+      stub(Model, 'findOne').resolves(usersMock.user);
+
+      const response = await chai
+        .request(app)
+        .post('/login')
+        .send({ ...usersMock.login });
+
+      expect(response.status).to.equal(OK);
+    });
+
+    it('should fail to login', async function () {
+      stub(Model, 'findOne').resolves(null);
+
+      const response = await chai
+        .request(app)
+        .post('/login')
+        .send({ ...usersMock.login });
+
+      expect(response.status).to.equal(UNAUTHORIZED);
     });
   });
 });
