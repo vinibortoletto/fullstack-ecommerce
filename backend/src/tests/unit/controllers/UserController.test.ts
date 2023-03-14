@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
 import { UserController } from '../../../api/controllers';
-import { Unauthorized } from '../../../api/errors';
+import { NotFound, Unauthorized } from '../../../api/errors';
 import { UserService } from '../../../api/services';
 import { userNotFound } from '../../../api/utils/errorMessages';
 import { CREATED, OK } from '../../../api/utils/httpStatusCodes';
@@ -47,6 +47,15 @@ describe('Unit tests for UserController', function () {
 
       expect(res.status).to.have.been.calledWith(OK);
       expect(res.json).to.have.been.calledWith(usersMock.user);
+    });
+
+    it('should fail to find user by id if it does not exists in the database', async function () {
+      const error = new NotFound(userNotFound);
+      req = { params: { id: 999 } } as unknown as Request;
+      sinon.stub(userService, 'findById').rejects(error);
+
+      await userController.findById(req, res, next);
+      expect(next).to.have.been.calledWith(error);
     });
   });
 
