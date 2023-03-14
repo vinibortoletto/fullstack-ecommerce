@@ -5,7 +5,7 @@ import { NotFound } from '../errors';
 import { Unauthorized } from '../errors';
 import { ILogin, IToken, IUserService } from '../interfaces';
 import BcryptHandler from '../utils/BcryptHandler';
-import { userNotFound } from '../utils/errorMessages';
+import { emailAlreadyInUse, userNotFound } from '../utils/errorMessages';
 import TokenHandler from '../utils/TokenHandler';
 
 export default class UserService implements IUserService {
@@ -27,7 +27,7 @@ export default class UserService implements IUserService {
       where: { email: user.email },
     });
 
-    if (hasUser) throw new Conflict('Já existe um usuário com esse email');
+    if (hasUser) throw new Conflict(emailAlreadyInUse);
 
     const password = BcryptHandler.hashPassword(user.password);
     const newUser: UserModel = await this._userModel.create({
