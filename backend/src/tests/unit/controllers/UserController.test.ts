@@ -4,9 +4,12 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
 import { UserController } from '../../../api/controllers';
-import { NotFound, Unauthorized } from '../../../api/errors';
+import { Conflict, NotFound, Unauthorized } from '../../../api/errors';
 import { UserService } from '../../../api/services';
-import { userNotFound } from '../../../api/utils/errorMessages';
+import {
+  emailAlreadyInUse,
+  userNotFound,
+} from '../../../api/utils/errorMessages';
 import { CREATED, OK } from '../../../api/utils/httpStatusCodes';
 import { usersMock } from '../../mocks';
 
@@ -68,6 +71,15 @@ describe('Unit tests for UserController', function () {
 
       expect(res.status).to.have.been.calledWith(CREATED);
       expect(res.json).to.have.been.calledWith(usersMock.newUser);
+    });
+
+    it('should fail to create a new user with an email that already exists', async function () {
+      const error = new Conflict(emailAlreadyInUse);
+      req.body = usersMock.newUserBody as unknown as Request;
+      sinon.stub(userService, 'create').rejects(error);
+
+      await userController.create(req, res, next);
+      expect(next).to.have.been.calledWith(error);
     });
   });
 
