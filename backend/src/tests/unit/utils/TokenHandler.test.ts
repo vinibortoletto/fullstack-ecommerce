@@ -1,5 +1,6 @@
 import { expect } from 'chai';
-import { Secret } from 'jsonwebtoken';
+import { Unauthorized } from '../../../api/errors';
+import { invalidToken } from '../../../api/utils/errorMessages';
 import TokenHandler from '../../../api/utils/TokenHandler';
 import { usersMock } from '../../mocks';
 
@@ -17,6 +18,16 @@ describe('TokenHandler', function () {
       const decodedUserInfo = TokenHandler.decode(token);
       expect(decodedUserInfo).to.haveOwnProperty('email');
       expect(decodedUserInfo).to.haveOwnProperty('password');
+    });
+
+    it('should fail to decode an invalid token', function () {
+      try {
+        TokenHandler.decode('token');
+      } catch (e) {
+        const error = e as Error;
+        expect(error).to.be.instanceOf(Unauthorized);
+        expect(error.message).to.equal(invalidToken);
+      }
     });
   });
 });
