@@ -4,12 +4,13 @@ import sinon from 'sinon';
 import { Conflict } from '../../../api/errors';
 import { NotFound } from '../../../api/errors';
 import { Unauthorized } from '../../../api/errors';
-import UserService from '../../../api/services/UserService';
+import { UserService } from '../../../api/services';
 import {
   emailAlreadyInUse,
   userNotFound,
 } from '../../../api/utils/errorMessages';
 import { CONFLICT, UNAUTHORIZED } from '../../../api/utils/httpStatusCodes';
+import TokenHandler from '../../../api/utils/TokenHandler';
 import { usersMock } from '../../mocks';
 
 describe('Unit tests for UserService', function () {
@@ -81,6 +82,13 @@ describe('Unit tests for UserService', function () {
         expect(error.stack).to.equal(String(UNAUTHORIZED));
         expect(error.message).to.equal(userNotFound);
       }
+    });
+
+    it('should be able to login', async function () {
+      sinon.stub(Model, 'findOne').resolves(usersMock.user);
+      sinon.stub(TokenHandler, 'generate').resolves('token');
+      const result = await userService.login(usersMock.login);
+      expect(result).to.deep.equal({ token: 'token' });
     });
   });
 });

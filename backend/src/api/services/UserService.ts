@@ -47,7 +47,7 @@ export default class UserService implements IUserService {
       throw new Unauthorized(userNotFound);
     }
 
-    const token: string = TokenHandler.generate(login);
+    const token: string = await TokenHandler.generate(login);
     return { token };
   }
 }
