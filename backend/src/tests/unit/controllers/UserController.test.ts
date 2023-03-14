@@ -4,7 +4,9 @@ import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
 import { UserController } from '../../../api/controllers';
+import { Unauthorized } from '../../../api/errors';
 import { UserService } from '../../../api/services';
+import { userNotFound } from '../../../api/utils/errorMessages';
 import { CREATED, OK } from '../../../api/utils/httpStatusCodes';
 import { usersMock } from '../../mocks';
 
@@ -69,6 +71,15 @@ describe('Unit tests for UserController', function () {
 
       expect(res.status).to.have.been.calledWith(OK);
       expect(res.json).to.have.been.calledWith({ token: 'token' });
+    });
+
+    it('should fail to login if email does not exists on the database', async function () {
+      const error = new Unauthorized(userNotFound);
+      req.body = usersMock.login as unknown as Request;
+      sinon.stub(userService, 'login').rejects(error);
+
+      await userController.login(req, res, next);
+      expect(next).to.have.been.calledWith(error);
     });
   });
 });
