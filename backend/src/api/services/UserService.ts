@@ -18,7 +18,7 @@ export default class UserService implements IUserService {
 
   public async findById(id: number): Promise<UserModel> {
     const user = await this._userModel.findByPk(id);
-    if (!user) throw new NotFound('User not found');
+    if (!user) throw new NotFound(userNotFound);
     return user;
   }
 

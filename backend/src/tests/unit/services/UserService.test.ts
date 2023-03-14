@@ -39,7 +39,7 @@ describe('Unit tests for UserService', function () {
       } catch (e) {
         const error = e as Error;
         expect(error).to.be.instanceOf(NotFound);
-        expect(error.message).to.equal('User not found');
+        expect(error.message).to.equal(userNotFound);
       }
     });
   });
